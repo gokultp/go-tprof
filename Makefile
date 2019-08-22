@@ -1,2 +1,5 @@
 build:
-	cd cmd/tprof && go build -o ${GOPATH}/bin/tprof
+	cd cmd/tprof && go build -o ~/bin/tprof
+
+.PHONY:
+	build

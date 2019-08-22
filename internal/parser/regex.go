@@ -5,10 +5,10 @@ import (
 )
 
 var (
-	rgxUntestedPackages = regexp.MustCompile(`(?m)^\?[ ]+(?P<package>([a-z.]*\/)*[a-z.]+)[ ]+\[no test files\]$`)
-	rgxTestedPackages   = regexp.MustCompile(`(?m)^(?P<status>(FAIL|PASS))[ ]+(?P<package>([a-z.]*\/)*[a-z.]+)[ ]+(?P<time>[0-9.]+s)$`)
-	rgxExecLine         = regexp.MustCompile(`(?m)^===[ ]+RUN[ ]+(?P<testcase>[a-zA-Z0-9_\/]+)$`)
-	rgxTestStatus       = regexp.MustCompile(`(?m)^[ ]*---[ ]+(?P<status>(PASS|FAIL)): (?P<testcase>[a-zA-Z0-9_\/]+)[ ]+\((?P<time>[0-9.]+s)\)$`)
+	rgxUntestedPackages = regexp.MustCompile(`(?m)^\?[ \t]+(?P<package>([a-z.]*\/)*[a-z.]+)[ \t]+\[no test files\]$`)
+	rgxTestedPackages   = regexp.MustCompile(`(?m)^(?P<status>(FAIL|PASS|ok))[ \t]+(?P<package>([a-z.]*\/)*[a-z.]+)[ \t]+(?P<time>[\(\)a-z0-9.]+)$`)
+	rgxExecLine         = regexp.MustCompile(`(?m)^===[ \t]+RUN[ \t]+(?P<testcase>[\w\W]+)$`)
+	rgxTestStatus       = regexp.MustCompile(`(?m)^[ \t]*---[ \t]+(?P<status>(PASS|FAIL|SKIP)): (?P<testcase>[\w\W]+)[ \t]+\((?P<time>[0-9.]+s)\)$`)
 )
 
 func isTestedPkgDescription(line string) bool {
@@ -67,4 +67,14 @@ func extractTestedPkgDescription(line string) (string, string, string) {
 		}
 	}
 	return pkg, status, time
+}
+
+func extractUntestedPkgDescription(line string) string {
+	values := rgxUntestedPackages.FindStringSubmatch(line)
+	for i, key := range rgxUntestedPackages.SubexpNames() {
+		if key == "package" {
+			return values[i]
+		}
+	}
+	return ""
 }

@@ -2,6 +2,7 @@ package parser
 
 import (
 	"bufio"
+	"fmt"
 	"io"
 	"strings"
 )
@@ -35,6 +36,7 @@ func ParseTestReport(r io.Reader) []Package {
 			}
 			continue
 		}
+
 		if isTestedPkgDescription(line) {
 			prevErr = false
 			pkgname, status, time := extractTestedPkgDescription(line)
@@ -44,10 +46,21 @@ func ParseTestReport(r io.Reader) []Package {
 				Time:      time,
 				Functions: groupTestFunc(tests),
 			}
+			pkg.FindCoverage()
 			tests = map[string]*TestFunc{}
 			pkgs = append(pkgs, pkg)
 			continue
 		}
+		if isUntestedPackageDescription(line) {
+			prevErr = false
+			if pkgName := extractUntestedPkgDescription(line); pkgName != "" {
+				pkg := Package{Name: pkgName}
+				pkgs = append(pkgs, pkg)
+			}
+			continue
+		}
+		fmt.Println(line)
+
 		if _, ok := tests[errFuncName]; ok && prevErr {
 			tests[errFuncName].SetError(s.Text())
 		}

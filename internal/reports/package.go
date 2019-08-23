@@ -22,13 +22,17 @@ type Package struct {
 }
 
 // NewPackage give a new instace of Package
-func NewPackage(name, status, time string, f []*TestFunc) *Package {
+func NewPackage(name string) *Package {
 	return &Package{
-		Name:      name,
-		Status:    status,
-		Time:      time,
-		Functions: f,
+		Name: name,
 	}
+}
+
+// SetResults will set the parsed results
+func (p *Package) SetResults(status, time string, f []*TestFunc) {
+	p.Status = status
+	p.Time = time
+	p.Functions = f
 }
 
 // FindCoverage will find test coverage for the package

@@ -2,9 +2,6 @@ package parser
 
 import (
 	"regexp"
-
-	"github.com/fatih/color"
-	"github.com/gokultp/go-tprof/internal/reports"
 )
 
 const (
@@ -35,23 +32,13 @@ func (d *TestStatusParser) IsAbleToParse() bool {
 
 // Println will print the line with formatting and colors
 func (d *TestStatusParser) Println() {
-	switch d.status {
-	case statusFail:
-		color.New(color.FgRed).Println(d.text)
-	case statusPass:
-		color.New(color.FgGreen).Println(d.text)
-	default:
-		color.New(color.FgYellow).Println(d.text)
-	}
+	c := getColourByStatus(d.status)
+	printWithColor(c, d.text)
 }
 
 // UpdateReports will update the reports and temp map by reference
-func (d *TestStatusParser) UpdateReports(
-	r *reports.Report,
-	f map[string]*reports.TestFunc,
-	failed *string,
-) {
-	*failed = ""
+func (d *TestStatusParser) UpdateReports(s *Scanner) {
+	s.ResetLastErrorFunc()
 	var name, status, time string
 	values := rgxTestStatus.FindStringSubmatch(d.text)
 	for i, key := range rgxTestStatus.SubexpNames() {
@@ -66,9 +53,9 @@ func (d *TestStatusParser) UpdateReports(
 	}
 	d.status = status
 	if status == statusFail {
-		*failed = name
+		*s.lastErrorFunc = name
 	}
-	if _, ok := f[name]; ok {
-		f[name].SetResults(status, time)
+	if _, ok := s.testMapIterator[name]; ok {
+		s.testMapIterator[name].SetResults(status, time)
 	}
 }

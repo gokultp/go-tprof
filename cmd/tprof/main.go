@@ -15,7 +15,8 @@ func main() {
 		panic(err)
 	}
 	if (stat.Mode() & os.ModeCharDevice) == 0 {
-		res := parser.ParseTestReport(os.Stdin)
+		scanner := parser.NewScanner()
+		res := scanner.ParseTestReport(os.Stdin)
 		data, err := json.Marshal(res)
 
 		fmt.Println(err, string(data))

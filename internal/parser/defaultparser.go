@@ -2,8 +2,6 @@ package parser
 
 import (
 	"fmt"
-
-	"github.com/gokultp/go-tprof/internal/reports"
 )
 
 // DefaultParser parser is a fallback parser
@@ -29,10 +27,6 @@ func (d *DefaultParser) Println() {
 }
 
 // UpdateReports will update the reports and temp map by reference
-func (d *DefaultParser) UpdateReports(
-	r *reports.Report,
-	f map[string]*reports.TestFunc,
-	failed *string,
-) {
+func (d *DefaultParser) UpdateReports(s *Scanner) {
 
 }

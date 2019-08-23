@@ -1,6 +1,7 @@
 package parser
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -31,17 +32,22 @@ func (d *PackageStatusParser) IsAbleToParse() bool {
 // Println will print the line with formatting and colors
 func (d *PackageStatusParser) Println() {
 	c := getColourByStatus(d.status)
-	c.Println(d.text)
+	printWithColor(c, d.text)
+}
+func printWithColor(c color.Attribute, msg string) {
+	if _, err := color.New(c).Println(msg); err != nil {
+		fmt.Println(msg)
+	}
 }
 
-func getColourByStatus(status string) *color.Color {
+func getColourByStatus(status string) color.Attribute {
 	switch status {
 	case statusFail:
-		return color.New(color.FgRed)
+		return color.FgRed
 	case statusPass:
-		return color.New(color.FgGreen)
+		return color.FgGreen
 	default:
-		return color.New(color.FgYellow)
+		return color.FgYellow
 	}
 }
 
@@ -64,7 +70,8 @@ func (d *PackageStatusParser) UpdateReports(s *Scanner) {
 		status = statusPass
 	}
 	d.status = status
-	p := reports.NewPackage(pkg, status, time, groupTestFunc(s.testMapIterator))
+	p := reports.NewPackage(pkg)
+	p.SetResults(status, time, groupTestFunc(s.testMapIterator))
 	p.FindCoverage()
 	s.report.AddPackage(p)
 	s.ResetIterator()

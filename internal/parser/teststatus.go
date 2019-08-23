@@ -33,7 +33,7 @@ func (d *TestStatusParser) IsAbleToParse() bool {
 // Println will print the line with formatting and colors
 func (d *TestStatusParser) Println() {
 	c := getColourByStatus(d.status)
-	c.Println(d.text)
+	printWithColor(c, d.text)
 }
 
 // UpdateReports will update the reports and temp map by reference

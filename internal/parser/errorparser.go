@@ -23,7 +23,7 @@ func (d *ErrorParser) IsAbleToParse() bool {
 
 // Println will print the line with formatting and colors
 func (d *ErrorParser) Println() {
-	color.New(color.FgRed).Println(d.text)
+	printWithColor(color.FgRed, d.text)
 	underline := make([]rune, len(d.text))
 	for i := 0; i < len(d.text); i++ {
 		if d.text[i] == ' ' || d.text[i] == '\t' {
@@ -32,8 +32,7 @@ func (d *ErrorParser) Println() {
 		}
 		underline[i] = '^'
 	}
-	color.New(color.FgRed).Println(string(underline))
-
+	printWithColor(color.FgRed, string(underline))
 }
 
 // UpdateReports will update the reports and temp map by reference

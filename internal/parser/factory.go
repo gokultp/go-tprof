@@ -11,6 +11,9 @@ func GetParser(txt string, failFunc string) Parser {
 	if p := NewTestStatusParser(txt); p.IsAbleToParse() {
 		return p
 	}
+	if p := NewSpippedPackageParser(txt); p.IsAbleToParse() {
+		return p
+	}
 	if failFunc != "" {
 		return NewErrorParser(txt)
 	}

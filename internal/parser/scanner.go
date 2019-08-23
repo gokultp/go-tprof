@@ -39,11 +39,10 @@ func (sc *Scanner) ResetIterator() {
 func (sc *Scanner) ParseTestReport(r io.Reader) *reports.Report {
 	s := bufio.NewScanner(r)
 	s.Split(bufio.ScanLines)
-	var failedFuc string
 
 	for s.Scan() {
 		line := s.Text()
-		p := GetParser(line, failedFuc)
+		p := GetParser(line, *sc.lastErrorFunc)
 		p.UpdateReports(sc)
 		p.Println()
 	}

@@ -5,19 +5,9 @@
 
 ## Install
 
-1. Prerequisites
-
 ```
-# should have go version >1.11
-# shoud have a bin folder in your home directory (~/bin) and that should be part of PATH
-export PATH=$PATH:~/bin/
-```
-
-```
-git clone https://github.com/gokultp/go-tprof.git
-cd go-tprof
-go get -d
-make 
+go get github.com/gokultp/go-tprof/cmd/tprof
+go install github.com/gokultp/go-tprof/cmd/tprof 
 ```
 
 ## Usage Instructions

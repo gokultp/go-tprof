@@ -23,7 +23,7 @@ To execute
 ## Features
 
 - [x] Parser and reports logic.
-- [] HTML Page
+- [ ] HTML Page
 
 ## License
 

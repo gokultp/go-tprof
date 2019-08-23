@@ -30,23 +30,24 @@ func (d *PackageStatusParser) IsAbleToParse() bool {
 
 // Println will print the line with formatting and colors
 func (d *PackageStatusParser) Println() {
-	switch d.status {
+	c := getColourByStatus(d.status)
+	c.Println(d.text)
+}
+
+func getColourByStatus(status string) *color.Color {
+	switch status {
 	case statusFail:
-		color.New(color.FgRed).Println(d.text)
+		return color.New(color.FgRed)
 	case statusPass:
-		color.New(color.FgGreen).Println(d.text)
+		return color.New(color.FgGreen)
 	default:
-		color.New(color.FgYellow).Println(d.text)
+		return color.New(color.FgYellow)
 	}
 }
 
 // UpdateReports will update the reports and temp map by reference
-func (d *PackageStatusParser) UpdateReports(
-	r *reports.Report,
-	f map[string]*reports.TestFunc,
-	failed *string,
-) {
-	*failed = ""
+func (d *PackageStatusParser) UpdateReports(s *Scanner) {
+	s.ResetLastErrorFunc()
 	var pkg, status, time string
 	values := rgxPackageStatus.FindStringSubmatch(d.text)
 	for i, key := range rgxPackageStatus.SubexpNames() {
@@ -63,10 +64,10 @@ func (d *PackageStatusParser) UpdateReports(
 		status = statusPass
 	}
 	d.status = status
-	p := reports.NewPackage(pkg, status, time, groupTestFunc(f))
-	// p.FindCoverage()
-	r.Packages = append(r.Packages, p)
-	f = map[string]*reports.TestFunc{}
+	p := reports.NewPackage(pkg, status, time, groupTestFunc(s.testMapIterator))
+	p.FindCoverage()
+	s.report.AddPackage(p)
+	s.ResetIterator()
 }
 
 func groupTestFunc(tests map[string]*reports.TestFunc) []*reports.TestFunc {

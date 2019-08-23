@@ -32,16 +32,12 @@ func (d *DescriptionParser) Println() {
 }
 
 // UpdateReports will update the reports and temp map by reference
-func (d *DescriptionParser) UpdateReports(
-	r *reports.Report,
-	f map[string]*reports.TestFunc,
-	failed *string,
-) {
-	*failed = ""
+func (d *DescriptionParser) UpdateReports(s *Scanner) {
+	s.ResetLastErrorFunc()
 	values := rgxDescrition.FindStringSubmatch(d.text)
 	for i, key := range rgxDescrition.SubexpNames() {
 		if key == "testcase" {
-			f[values[i]] = reports.NewTestFunc(values[i])
+			s.testMapIterator[values[i]] = reports.NewTestFunc(values[i])
 		}
 	}
 }

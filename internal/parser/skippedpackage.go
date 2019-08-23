@@ -7,7 +7,7 @@ import (
 	"github.com/gokultp/go-tprof/internal/reports"
 )
 
-var rgxSkippedPackages = regexp.MustCompile(`(?m)^\?[ \t]+(?P<package>([a-z.]*\/)*[a-z.]+)[ \t]+\[no test files\]$`)
+var rgxSkippedPackages = regexp.MustCompile(`(?m)\?[ \t]+(?P<package>([a-z.-]*\/)*[a-z.-]+)[ \t]+\[no test files\]$`)
 
 // SpippedPackageParser parses test execution SpippedPackages
 type SpippedPackageParser struct {

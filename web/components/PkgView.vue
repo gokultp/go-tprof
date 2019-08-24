@@ -5,17 +5,19 @@
         <strong>{{pkg.name}}</strong>
       </div>
       <div>
-        {{pkg.name}}
-        {{pkg.name}}
+        <table-view :functions="pkg.functions"/>
       </div>
     </b-collapse>
   </div>
 </template>
 
 <script>
-
+import TableView from './Table'
 export default {
   name: 'Charts',
+  components: {
+    TableView
+  },
   props: ['pkg']
 }
 </script>

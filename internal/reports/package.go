@@ -14,11 +14,11 @@ var rgxCoverage = regexp.MustCompile(`(?m)coverage[ \t]*:[ \t]*(?P<coverage>[0-9
 
 // Package encapsulates test reports for a package
 type Package struct {
-	Name      string
-	Functions []*TestFunc
-	Status    string
-	Time      string
-	Coverage  float64
+	Name      string      `json:"name"`
+	Functions []*TestFunc `json:"functions"`
+	Status    string      `json:"status"`
+	Time      string      `json:"time"`
+	Coverage  float64     `json:"coverage"`
 }
 
 // NewPackage give a new instace of Package

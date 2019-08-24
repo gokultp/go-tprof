@@ -2,11 +2,11 @@ package reports
 
 // TestFunc encapsulates a test function's reports
 type TestFunc struct {
-	Name     string
-	Status   string
-	Time     string
-	Error    string
-	SubTests []*TestFunc
+	Name     string      `json:"name"`
+	Status   string      `json:"status"`
+	Time     string      `json:"time"`
+	Error    string      `json:"error"`
+	SubTests []*TestFunc `json:"subtests"`
 }
 
 // NewTestFunc returns a new instance of TestFunc

@@ -2,14 +2,17 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"os"
+	"sync"
 
 	"github.com/fatih/color"
+	"github.com/gokultp/go-tprof/internal/browser"
 	"github.com/gokultp/go-tprof/internal/parser"
+	"github.com/gokultp/go-tprof/internal/staticserver"
 )
 
 func main() {
+	var wg sync.WaitGroup
 	stat, err := os.Stdin.Stat()
 	if err != nil {
 		panic(err)
@@ -18,8 +21,16 @@ func main() {
 		scanner := parser.NewScanner()
 		res := scanner.ParseTestReport(os.Stdin)
 		data, err := json.Marshal(res)
+		if err != nil {
+			panic(err)
+		}
+		wg.Add(1)
+		go staticserver.Start(string(data), "6969", &wg)
+		if err := browser.Open("http://localhost:6969"); err != nil {
+			panic(err)
+		}
+		wg.Wait()
 
-		fmt.Println(err, string(data))
 		return
 	}
 	color.New(color.FgRed).Printf("not getting any stream from stdin, you have to run tprof like the following.\n")

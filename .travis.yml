@@ -8,5 +8,6 @@ script:
   - env GO111MODULE=on go get -d
   - go get github.com/rakyll/statik
   - go install github.com/rakyll/statik
+  - mkdir assets
   - make gen-statik
   - env GO111MODULE=on go test -cpu=1,2 -v -tags integration ./...

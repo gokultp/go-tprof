@@ -5,7 +5,7 @@ go:
   - 1.12.x
 
 script:
-  - go install go get github.com/rakyll/statik
-  - make gen-statik
   - env GO111MODULE=on go get -d
+  - go install github.com/rakyll/statik
+  - make gen-statik
   - env GO111MODULE=on go test -cpu=1,2 -v -tags integration ./...

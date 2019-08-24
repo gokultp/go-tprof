@@ -11,28 +11,52 @@ import (
 	"github.com/rakyll/statik/fs"
 )
 
-func StartServer(data, port string, wg *sync.WaitGroup) error {
+const (
+	dataPlaceHolder = "{{data}}"
+	indexFile       = "/index.html"
+)
+
+// Start will start the server
+func Start(data, port string, wg *sync.WaitGroup) error {
 	defer wg.Done()
 	statikFS, err := fs.New()
 	if err != nil {
 		return err
 	}
-	d, err := fs.ReadFile(statikFS, "/index.html")
+	strHTML, err := getHTMLContent(statikFS, data)
 	if err != nil {
 		return err
 	}
-	strHTML := string(d)
-	strHTML = strings.Replace(strHTML, "{{data}}", data, 1)
+
 	http.Handle("/_nuxt/", http.FileServer(statikFS))
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, strHTML)
 	})
-
-	color.New(color.FgMagenta).Printf("\n\n\n\n\t Visit http://localhost:6969 to see the reports \n\n\t Press Ctrl + C to exit")
+	if err := printHelpMsg(port); err != nil {
+		return err
+	}
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		return err
 	}
 
 	return nil
 
+}
+
+func getHTMLContent(hfs http.FileSystem, data string) (string, error) {
+	d, err := fs.ReadFile(hfs, indexFile)
+	if err != nil {
+		return "", err
+	}
+	return strings.Replace(string(d), dataPlaceHolder, data, 1), nil
+}
+func printHelpMsg(port string) error {
+	clrPrinter := color.New(color.FgMagenta)
+	if _, err := clrPrinter.Printf("\n\n\n\n\t Visit http://localhost:%s to see the reports", port); err != nil {
+		return err
+	}
+	if _, err := clrPrinter.Printf("\n\n\t Press Ctrl + C to exit"); err != nil {
+		return err
+	}
+	return nil
 }

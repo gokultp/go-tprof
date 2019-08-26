@@ -14,7 +14,7 @@
         <b-table-column
           field="name"
           label="Name"
-          width="300"
+          width="600"
         >
           <template >
             <a @click="toggle(props.row)">{{ props.row.name }}</a>
@@ -47,7 +47,7 @@
       </template>
 
       <template slot="detail" slot-scope="props">
-        <tr v-for="(item, index) in props.row.items" :key="index">
+        <tr v-for="(item, index) in props.row.subtests" :key="index">
           <td v-if="showDetailIcon"></td>
           <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ item.name }}</td>
           <td class="has-text-centered">{{ item.time }}</td>

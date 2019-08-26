@@ -3,6 +3,7 @@ package parser
 import (
 	"bufio"
 	"io"
+	"sync"
 
 	"github.com/gokultp/go-tprof/internal/reports"
 )
@@ -39,12 +40,13 @@ func (sc *Scanner) ResetIterator() {
 func (sc *Scanner) ParseTestReport(r io.Reader) *reports.Report {
 	s := bufio.NewScanner(r)
 	s.Split(bufio.ScanLines)
-
+	var wg sync.WaitGroup
 	for s.Scan() {
 		line := s.Text()
 		p := GetParser(line, *sc.lastErrorFunc)
-		p.UpdateReports(sc)
+		p.UpdateReports(sc, &wg)
 		p.Println()
 	}
+	wg.Wait()
 	return sc.report
 }

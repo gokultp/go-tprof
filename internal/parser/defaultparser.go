@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"sync"
 )
 
 // DefaultParser parser is a fallback parser
@@ -27,6 +28,6 @@ func (d *DefaultParser) Println() {
 }
 
 // UpdateReports will update the reports and temp map by reference
-func (d *DefaultParser) UpdateReports(s *Scanner) {
+func (d *DefaultParser) UpdateReports(s *Scanner, wg *sync.WaitGroup) {
 
 }

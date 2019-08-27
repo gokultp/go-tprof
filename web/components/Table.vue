@@ -17,7 +17,7 @@
           width="600"
         >
           <template >
-            <a @click="toggle(props.row)">{{ props.row.name }}</a>
+            <a @click="toggle(props.row)">{{ props.row.name }} ({{props.row.subtests ? props.row.subtests.length: 0}})</a>
           </template>
         </b-table-column>
 

@@ -1,7 +1,7 @@
 build: build-ui gen-statik compile
 
 compile: 
-	cd cmd/tprof && go build -o ~/bin/tprof
+	cd cmd/tprof && go build -o ${GOPATH}/bin/tprof
 
 build-nuxt:
 	cd web && yarn build 
@@ -22,6 +22,7 @@ build-ui: clean build-nuxt copy-assets	gen-template
 gen-statik:
 	cd internal && statik -src=../assets
 
-
+config:
+	cd web && yarn install
 .PHONY:
 	build

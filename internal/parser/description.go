@@ -2,6 +2,7 @@ package parser
 
 import (
 	"regexp"
+	"sync"
 
 	"github.com/fatih/color"
 	"github.com/gokultp/go-tprof/internal/reports"
@@ -32,7 +33,7 @@ func (d *DescriptionParser) Println() {
 }
 
 // UpdateReports will update the reports and temp map by reference
-func (d *DescriptionParser) UpdateReports(s *Scanner) {
+func (d *DescriptionParser) UpdateReports(s *Scanner, wg *sync.WaitGroup) {
 	s.ResetLastErrorFunc()
 	values := rgxDescription.FindStringSubmatch(d.text)
 	for i, key := range rgxDescription.SubexpNames() {

@@ -2,6 +2,7 @@ package parser
 
 import (
 	"regexp"
+	"sync"
 )
 
 const (
@@ -37,7 +38,7 @@ func (d *TestStatusParser) Println() {
 }
 
 // UpdateReports will update the reports and temp map by reference
-func (d *TestStatusParser) UpdateReports(s *Scanner) {
+func (d *TestStatusParser) UpdateReports(s *Scanner, wg *sync.WaitGroup) {
 	s.ResetLastErrorFunc()
 	var name, status, time string
 	values := rgxTestStatus.FindStringSubmatch(d.text)

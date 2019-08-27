@@ -14,17 +14,20 @@ var rgxCoverage = regexp.MustCompile(`(?m)coverage[ \t]*:[ \t]*(?P<coverage>[0-9
 
 // Package encapsulates test reports for a package
 type Package struct {
-	Name      string      `json:"name"`
-	Functions []*TestFunc `json:"functions"`
-	Status    string      `json:"status"`
-	Time      string      `json:"time"`
-	Coverage  float64     `json:"coverage"`
+	Name        string      `json:"name"`
+	Functions   []*TestFunc `json:"functions"`
+	Status      string      `json:"status"`
+	Time        string      `json:"time"`
+	Coverage    float64     `json:"coverage"`
+	PassedCases int         `json:"passed_cases"`
+	Full        int         `json:"full"`
 }
 
 // NewPackage give a new instace of Package
 func NewPackage(name string) *Package {
 	return &Package{
 		Name: name,
+		Full: 100,
 	}
 }
 
@@ -36,11 +39,14 @@ func (p *Package) SetResults(status, time string, f []*TestFunc) {
 }
 
 // FindCoverage will find test coverage for the package
-func (p *Package) FindCoverage() int {
+func (p *Package) FindCoverage(pwg *sync.WaitGroup) int {
 	var wg sync.WaitGroup
 	r, w := io.Pipe()
 	wg.Add(1)
-	defer wg.Wait()
+	defer func() {
+		wg.Wait()
+		pwg.Done()
+	}()
 	cmd := exec.Command("go", "test", p.Name, "-coverprofile=/tmp/1")
 	cmd.Stderr = w
 	cmd.Stdout = w
@@ -78,4 +84,13 @@ func getCoverageFromStr(line string) float64 {
 		}
 	}
 	return 0
+}
+
+// GetNumberOfPassedCases will update the count of passed cases for the package
+func (p *Package) GetNumberOfPassedCases() {
+	for _, t := range p.Functions {
+		if t.Status == "PASS" {
+			p.PassedCases++
+		}
+	}
 }

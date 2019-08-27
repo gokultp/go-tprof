@@ -1,7 +1,15 @@
 <template>
   <div>
-    <pie />
-    <pie />
+    <div class="columns">
+      <div class="column">
+        <h3> No of Testcases </h3>
+        <pie :data="pkgs" />
+      </div>
+      <div class="column">
+        <h3> Test Coverage </h3>
+        <guage :data="pkgs" />
+      </div>
+    </div>
     <pkg-view v-for="pkg in pkgs" v-bind:key="pkg.name" :pkg="pkg" />
   </div>
 </template>
@@ -9,11 +17,13 @@
 <script>
 import Pie from '../components/Pie'
 import PkgView from '../components/PkgView'
+import Guage from '../components/Guage'
 export default {
   name: 'HomePage',
   components: {
     Pie,
-    PkgView
+    PkgView,
+    Guage
   },
   data () {
     return {

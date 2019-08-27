@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"regexp"
 	"strings"
+	"sync"
 
 	"github.com/fatih/color"
 	"github.com/gokultp/go-tprof/internal/reports"
@@ -52,7 +53,7 @@ func getColourByStatus(status string) color.Attribute {
 }
 
 // UpdateReports will update the reports and temp map by reference
-func (d *PackageStatusParser) UpdateReports(s *Scanner) {
+func (d *PackageStatusParser) UpdateReports(s *Scanner, wg *sync.WaitGroup) {
 	s.ResetLastErrorFunc()
 	var pkg, status, time string
 	values := rgxPackageStatus.FindStringSubmatch(d.text)
@@ -72,7 +73,9 @@ func (d *PackageStatusParser) UpdateReports(s *Scanner) {
 	d.status = status
 	p := reports.NewPackage(pkg)
 	p.SetResults(status, time, groupTestFunc(s.testMapIterator))
-	p.FindCoverage()
+	wg.Add(1)
+	go p.FindCoverage(wg)
+	p.GetNumberOfPassedCases()
 	s.report.AddPackage(p)
 	s.ResetIterator()
 }

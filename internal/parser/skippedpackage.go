@@ -3,6 +3,7 @@ package parser
 import (
 	"fmt"
 	"regexp"
+	"sync"
 
 	"github.com/gokultp/go-tprof/internal/reports"
 )
@@ -32,7 +33,7 @@ func (d *SpippedPackageParser) Println() {
 }
 
 // UpdateReports will update the reports and temp map by reference
-func (d *SpippedPackageParser) UpdateReports(s *Scanner) {
+func (d *SpippedPackageParser) UpdateReports(s *Scanner, wg *sync.WaitGroup) {
 	s.ResetLastErrorFunc()
 	var pkg string
 	values := rgxSkippedPackages.FindStringSubmatch(d.text)

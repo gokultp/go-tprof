@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"sync"
+
 	"github.com/fatih/color"
 )
 
@@ -36,7 +38,7 @@ func (d *ErrorParser) Println() {
 }
 
 // UpdateReports will update the reports and temp map by reference
-func (d *ErrorParser) UpdateReports(s *Scanner) {
+func (d *ErrorParser) UpdateReports(s *Scanner, wg *sync.WaitGroup) {
 	if s.lastErrorFunc != nil {
 		if _, ok := s.testMapIterator[*s.lastErrorFunc]; ok {
 			s.testMapIterator[*s.lastErrorFunc].SetError(d.text)

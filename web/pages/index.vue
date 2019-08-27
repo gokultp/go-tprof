@@ -2,11 +2,11 @@
   <div>
     <div class="columns">
       <div class="column">
-        <h3> No of Testcases </h3>
+        <h2> No of Testcases </h2>
         <pie :data="pkgs" />
       </div>
       <div class="column">
-        <h3> Test Coverage </h3>
+        <h2> Test Coverage </h2>
         <guage :data="pkgs" />
       </div>
     </div>

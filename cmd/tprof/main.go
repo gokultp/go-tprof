@@ -25,8 +25,8 @@ func main() {
 			panic(err)
 		}
 		wg.Add(1)
-		go staticserver.Start(string(data), "6969", &wg)
-		if err := browser.Open("http://localhost:6969"); err != nil {
+		go staticserver.Start(string(data), "9999", &wg)
+		if err := browser.Open("http://localhost:9999"); err != nil {
 			panic(err)
 		}
 		wg.Wait()

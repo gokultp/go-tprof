@@ -7,9 +7,7 @@
     >
       <div class="navbar-brand">
         <div class="navbar-burger">
-          <span />
-          <span />
-          <span />
+          <h1>Test Report </h1>
         </div>
       </div>
     </nav>

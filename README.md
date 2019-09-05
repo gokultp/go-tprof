@@ -3,7 +3,7 @@
 ## Overview [![GoDoc](https://godoc.org/github.com/gokultp/go-tprof?status.svg)](https://godoc.org/github.com/gokultp/go-tprof) [![Build Status](https://travis-ci.org/gokultp/go-tprof.svg?branch=master)](https://travis-ci.org/gokultp/go-tprof) [![Code Climate](https://codeclimate.com/github/gokultp/go-tprof/badges/gpa.svg)](https://codeclimate.com/github/gokultp/go-tprof) [![Go Report Card](https://goreportcard.com/badge/github.com/gokultp/go-tprof)](https://goreportcard.com/report/github.com/gokultp/go-tprof)
 
 
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/4lzqb0Nic2k/0.jpg)](https://www.youtube.com/watch?v=4lzqb0Nic2k)
+[![IMAGE ALT TEXT HERE](./animation.gif)](https://www.youtube.com/watch?v=4lzqb0Nic2k)
 
 ## Prerequisites
     1. Go version >= 1.12 

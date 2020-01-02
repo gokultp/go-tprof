@@ -14,7 +14,7 @@ func GetParser(txt string, failFunc string) Parser {
 	if p := NewSpippedPackageParser(txt); p.IsAbleToParse() {
 		return p
 	}
-	if failFunc != "" {
+	if ailFunc != "" {
 		return NewErrorParser(txt)
 	}
 	return NewDefaultParser(txt)
